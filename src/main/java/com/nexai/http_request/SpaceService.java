@@ -40,7 +40,7 @@ public class SpaceService {
         CompletableFuture<Map.Entry<String, Long>> restClientFuture = CompletableFuture.supplyAsync(() -> restClientRequest());
         CompletableFuture<Map.Entry<String, Long>> openFeignFuture = CompletableFuture.supplyAsync(() -> openFeignRequest());
 
-        // Ожидание всех результатов
+
         CompletableFuture.allOf(webClientFuture, restTemplateFuture, httpClientFuture, restClientFuture, openFeignFuture).join();
 
         List<Map.Entry<String, Long>> results = Arrays.asList(
@@ -51,10 +51,10 @@ public class SpaceService {
                 openFeignFuture.get()
         );
 
-        // Вывод результатов
+
         results.forEach(entry -> System.out.println(entry.getKey() + ": " + entry.getValue() + " ms"));
 
-        // Определяем самый быстрый и самый долгий запрос
+
         Map.Entry<String, Long> fastest = results.stream().min(Comparator.comparingLong(Map.Entry::getValue)).orElseThrow();
         Map.Entry<String, Long> slowest = results.stream().max(Comparator.comparingLong(Map.Entry::getValue)).orElseThrow();
 
